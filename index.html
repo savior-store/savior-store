@@ -18,10 +18,7 @@
     background-size: cover;
   }
 
-  header {
-    text-align: center;
-    padding: 40px 20px 30px;
-  }
+  header { text-align: center; padding: 40px 20px 30px; }
 
   .logo {
     font-size: 48px;
@@ -35,11 +32,7 @@
     margin-bottom: 8px;
   }
 
-  .tagline {
-    color: #a0a0c0;
-    font-size: 15px;
-    letter-spacing: 1px;
-  }
+  .tagline { color: #a0a0c0; font-size: 15px; letter-spacing: 1px; }
 
   .trust-bar {
     display: flex;
@@ -74,11 +67,7 @@
     border-radius: 2px;
   }
 
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 20px 60px;
-  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
 
   .games-grid {
     display: grid;
@@ -99,10 +88,8 @@
   .game-card::before {
     content: '';
     position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 3px;
+    top: 0; right: 0;
+    width: 100%; height: 3px;
     background: linear-gradient(90deg, var(--c1), var(--c2));
   }
 
@@ -119,18 +106,9 @@
     color: var(--c1);
   }
 
-  .game-card p {
-    color: #9090b0;
-    font-size: 13px;
-    margin-bottom: 15px;
-  }
+  .game-card p { color: #9090b0; font-size: 13px; margin-bottom: 15px; }
 
-  /* زرين جان بعض */
-  .btn-row {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
 
   .game-btn {
     flex: 1;
@@ -144,6 +122,9 @@
     font-size: 13px;
     background: linear-gradient(135deg, var(--c1), var(--c2));
     transition: 0.3s;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
   }
 
   .game-btn:hover {
@@ -157,10 +138,7 @@
     color: var(--c1);
   }
 
-  .game-btn.alt:hover {
-    background: var(--c1);
-    color: #fff;
-  }
+  .game-btn.alt:hover { background: var(--c1); color: #fff; }
 
   .pubg     { --c1:#ff6b35; --c2:#ffa500; --glow:rgba(255,107,53,0.4); }
   .freefire { --c1:#a855f7; --c2:#ec4899; --glow:rgba(168,85,247,0.4); }
@@ -209,8 +187,8 @@
       <h3>🔫 ببجي موبايل</h3>
       <p>حسابات بجميع المستويات + شدات UC</p>
       <div class="btn-row">
-        <a class="game-btn" href="https://wa.me/964XXXXXXXXX?text=بدي استفسر عن حسابات ببجي">🎮 حسابات</a>
-        <a class="game-btn alt" href="https://wa.me/964XXXXXXXXX?text=بدي استفسر عن شدات UC ببجي">💎 شدات UC</a>
+        <button class="game-btn" onclick="svBot.openFromGame('pubg','accounts')">🎮 حسابات</button>
+        <button class="game-btn alt" onclick="svBot.openFromGame('pubg','currency')">💎 شدات UC</button>
       </div>
     </div>
 
@@ -219,8 +197,8 @@
       <h3>🔥 فري فاير</h3>
       <p>حسابات أسطورية + جواهر وشخصيات</p>
       <div class="btn-row">
-        <a class="game-btn" href="https://wa.me/964XXXXXXXXX?text=بدي استفسر عن حسابات فري فاير">🎮 حسابات</a>
-        <a class="game-btn alt" href="https://wa.me/964XXXXXXXXX?text=بدي استفسر عن جواهر فري فاير">💎 جواهر</a>
+        <button class="game-btn" onclick="svBot.openFromGame('freefire','accounts')">🎮 حسابات</button>
+        <button class="game-btn alt" onclick="svBot.openFromGame('freefire','currency')">💎 جواهر</button>
       </div>
     </div>
 
@@ -229,8 +207,8 @@
       <h3>🃏 جواكر</h3>
       <p>حسابات مميزة + شدات وطرنيب</p>
       <div class="btn-row">
-        <a class="game-btn" href="https://wa.me/964XXXXXXXXX?text=بدي استفسر عن حسابات جواكر">🎮 حسابات</a>
-        <a class="game-btn alt" href="https://wa.me/964XXXXXXXXX?text=بدي استفسر عن شدات جواكر">🪙 شدات</a>
+        <button class="game-btn" onclick="svBot.openFromGame('jawaker','accounts')">🎮 حسابات</button>
+        <button class="game-btn alt" onclick="svBot.openFromGame('jawaker','currency')">🪙 شدات</button>
       </div>
     </div>
 
@@ -239,8 +217,8 @@
       <h3>🛡️ كلاش أوف كلانس</h3>
       <p>قرى قوية + مستوى تاون هول عالي</p>
       <div class="btn-row">
-        <a class="game-btn" href="https://wa.me/964XXXXXXXXX?text=بدي استفسر عن حسابات كلاش اوف كلانس">🎮 حسابات</a>
-        <a class="game-btn alt" href="https://wa.me/964XXXXXXXXX?text=بدي استفسر عن جواهر كلاش اوف كلانس">💎 جواهر</a>
+        <button class="game-btn" onclick="svBot.openFromGame('coc','accounts')">🎮 حسابات</button>
+        <button class="game-btn alt" onclick="svBot.openFromGame('coc','currency')">💎 جواهر</button>
       </div>
     </div>
 
@@ -249,8 +227,8 @@
       <h3>👑 كلاش رويال</h3>
       <p>حسابات بأعلى الرتب + بطاقات نادرة</p>
       <div class="btn-row">
-        <a class="game-btn" href="https://wa.me/964XXXXXXXXX?text=بدي استفسر عن حسابات كلاش رويال">🎮 حسابات</a>
-        <a class="game-btn alt" href="https://wa.me/964XXXXXXXXX?text=بدي استفسر عن جواهر كلاش رويال">💎 جواهر</a>
+        <button class="game-btn" onclick="svBot.openFromGame('royale','accounts')">🎮 حسابات</button>
+        <button class="game-btn alt" onclick="svBot.openFromGame('royale','currency')">💎 جواهر</button>
       </div>
     </div>
 
@@ -259,8 +237,8 @@
       <h3>🎯 فورتنايت</h3>
       <p>حسابات نادرة + سكنات OG</p>
       <div class="btn-row">
-        <a class="game-btn" href="https://wa.me/964XXXXXXXXX?text=بدي استفسر عن حسابات فورتنايت">🎮 حسابات</a>
-        <a class="game-btn alt" href="https://wa.me/964XXXXXXXXX?text=بدي استفسر عن V-Bucks فورتنايت">💎 V-Bucks</a>
+        <button class="game-btn" onclick="svBot.openFromGame('fortnite','accounts')">🎮 حسابات</button>
+        <button class="game-btn alt" onclick="svBot.openFromGame('fortnite','currency')">💎 V-Bucks</button>
       </div>
     </div>
 
@@ -270,7 +248,7 @@
 <footer>
   © 2026 <strong>thesavior-store</strong> — جميع الحقوق محفوظة
 </footer>
+
 <script src="bot.js"></script>
 </body>
-</html>
-
+     </html>
