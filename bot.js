@@ -1,40 +1,130 @@
 // ==========================================
-// Savior Store Bot - v1.0
+// Savior Store Bot - v2.0
 // ==========================================
 
 (function() {
-  // ===== إعدادات =====
   const CONFIG = {
-    whatsapp: "964XXXXXXXXX", // ← بدّل رقمك هون
-    storeName: "Savior Store"
+    whatsapp: "964XXXXXXXXX" // ← بدّل رقمك هون
+  };
+
+  // ===== الباقات =====
+  const PACKS = {
+    pubg: {
+      accounts: [
+        { name: "حساب مستوى 30", price: 15 },
+        { name: "حساب مستوى 45", price: 35 },
+        { name: "حساب مستوى 60", price: 70 },
+        { name: "حساب كونكر", price: 150 }
+      ],
+      currency: [
+        { name: "60 UC", price: 5 },
+        { name: "325 UC", price: 25 },
+        { name: "660 UC", price: 50 },
+        { name: "1800 UC", price: 120 }
+      ]
+    },
+    freefire: {
+      accounts: [
+        { name: "حساب عادي", price: 15 },
+        { name: "حساب هيرو", price: 40 },
+        { name: "حساب أسطوري", price: 90 },
+        { name: "حساب نادر", price: 200 }
+      ],
+      currency: [
+        { name: "100 جواهر", price: 5 },
+        { name: "520 جواهر", price: 25 },
+        { name: "1060 جواهر", price: 50 },
+        { name: "2180 جواهر", price: 100 }
+      ]
+    },
+    jawaker: {
+      accounts: [
+        { name: "حساب مبتدئ", price: 10 },
+        { name: "حساب متوسط", price: 25 },
+        { name: "حساب متقدم", price: 50 },
+        { name: "حساب VIP", price: 100 }
+      ],
+      currency: [
+        { name: "1000 شدة", price: 5 },
+        { name: "5000 شدة", price: 25 },
+        { name: "10000 شدة", price: 50 },
+        { name: "25000 شدة", price: 120 }
+      ]
+    },
+    coc: {
+      accounts: [
+        { name: "TH 8", price: 15 },
+        { name: "TH 11", price: 40 },
+        { name: "TH 13", price: 80 },
+        { name: "TH 15", price: 150 }
+      ],
+      currency: [
+        { name: "500 جواهر", price: 5 },
+        { name: "2500 جواهر", price: 25 },
+        { name: "6500 جواهر", price: 50 },
+        { name: "14000 جواهر", price: 100 }
+      ]
+    },
+    royale: {
+      accounts: [
+        { name: "حساب أرينا 5", price: 10 },
+        { name: "حساب أرينا 8", price: 25 },
+        { name: "حساب أرينا 11", price: 50 },
+        { name: "حساب أرينا 14", price: 100 }
+      ],
+      currency: [
+        { name: "500 جواهر", price: 5 },
+        { name: "2500 جواهر", price: 25 },
+        { name: "6500 جواهر", price: 50 },
+        { name: "14000 جواهر", price: 100 }
+      ]
+    },
+    fortnite: {
+      accounts: [
+        { name: "حساب عادي", price: 15 },
+        { name: "حساب OG", price: 40 },
+        { name: "حساب نادر", price: 90 },
+        { name: "حساب رينيجيد", price: 250 }
+      ],
+      currency: [
+        { name: "1000 V-Bucks", price: 8 },
+        { name: "2800 V-Bucks", price: 20 },
+        { name: "5000 V-Bucks", price: 35 },
+        { name: "13500 V-Bucks", price: 90 }
+      ]
+    }
+  };
+
+  const GAME_NAMES = {
+    pubg: "🔫 ببجي موبايل",
+    freefire: "🔥 فري فاير",
+    jawaker: "🃏 جواكر",
+    coc: "🛡️ كلاش أوف كلانس",
+    royale: "👑 كلاش رويال",
+    fortnite: "🎯 فورتنايت"
+  };
+
+  const CURRENCY_LABELS = {
+    pubg: "شدات UC",
+    freefire: "جواهر",
+    jawaker: "شدات",
+    coc: "جواهر",
+    royale: "جواهر",
+    fortnite: "V-Bucks"
   };
 
   // ===== الحالة =====
   let botState = {
     open: false,
-    step: "home",     // الشاشة الحالية
-    data: {           // بيانات الزبون
-      game: null,
-      category: null,
-      pack: null,
-      price: null,
-      payment: null,
-      playerId: null
-    }
+    data: { game: null, category: null, pack: null, price: null }
   };
 
-  // ===== بناء واجهة البوت =====
+  // ===== UI =====
   function buildUI() {
     const html = `
-      <!-- الزر العائم -->
-      <div id="sv-bot-button" onclick="svBot.open()">
-        💬
-      </div>
-
-      <!-- نافذة البوت -->
       <div id="sv-bot-window">
         <div id="sv-bot-header">
-          <div class="sv-title">🛡️ ${CONFIG.storeName}</div>
+          <div class="sv-title">🛡️ Savior Store</div>
           <div class="sv-close" onclick="svBot.close()">✕</div>
         </div>
         <div id="sv-bot-content"></div>
@@ -43,42 +133,19 @@
     document.body.insertAdjacentHTML('beforeend', html);
   }
 
-  // ===== بناء الستايل =====
   function buildCSS() {
     const css = `
-      /* الزر العائم */
-      #sv-bot-button {
+      #sv-bot-window {
         position: fixed;
         bottom: 20px;
         left: 20px;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #8b5cf6, #ec4899);
-        color: white;
-        font-size: 28px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 4px 20px rgba(139,92,246,0.5);
-        z-index: 9998;
-        transition: transform 0.3s;
-      }
-      #sv-bot-button:hover { transform: scale(1.1); }
-
-      /* النافذة */
-      #sv-bot-window {
-        position: fixed;
-        bottom: 90px;
-        left: 20px;
-        width: 340px;
+        width: 360px;
         max-width: calc(100vw - 40px);
-        height: 500px;
-        max-height: calc(100vh - 120px);
+        height: 520px;
+        max-height: calc(100vh - 40px);
         background: #12122a;
         border-radius: 16px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.7);
         border: 1px solid #2a2a4a;
         display: none;
         flex-direction: column;
@@ -87,7 +154,6 @@
       }
       #sv-bot-window.open { display: flex; }
 
-      /* الهيدر */
       #sv-bot-header {
         background: linear-gradient(135deg, #8b5cf6, #ec4899);
         padding: 14px 18px;
@@ -105,7 +171,6 @@
       }
       .sv-close:hover { opacity: 1; }
 
-      /* المحتوى */
       #sv-bot-content {
         flex: 1;
         overflow-y: auto;
@@ -114,7 +179,6 @@
         font-family: 'Segoe UI', Arial, sans-serif;
       }
 
-      /* الرسائل */
       .sv-msg {
         background: #1a1a3a;
         padding: 12px 15px;
@@ -124,7 +188,6 @@
         line-height: 1.5;
       }
 
-      /* الأزرار */
       .sv-btn {
         display: block;
         width: 100%;
@@ -149,9 +212,7 @@
         background: linear-gradient(135deg, #8b5cf6, #ec4899);
         border: none;
       }
-      .sv-btn.primary:hover {
-        filter: brightness(1.15);
-      }
+      .sv-btn.primary:hover { filter: brightness(1.15); }
       .sv-btn.back {
         background: transparent;
         border: 1px dashed #3a3a5a;
@@ -160,21 +221,12 @@
         margin-top: 10px;
       }
 
-      /* شريط التقدم */
-      .sv-progress {
-        font-size: 11px;
-        color: #6060a0;
-        margin-bottom: 12px;
-        text-align: center;
-      }
-
-      /* الموبايل */
       @media (max-width: 500px) {
         #sv-bot-window {
           width: calc(100vw - 20px);
           left: 10px;
-          bottom: 90px;
-          height: calc(100vh - 120px);
+          bottom: 10px;
+          height: calc(100vh - 20px);
         }
       }
     `;
@@ -183,102 +235,11 @@
     document.head.appendChild(style);
   }
 
-  // ===== الشاشات =====
-  const SCREENS = {
-    // 1. الشاشة الرئيسية
-    home: () => `
-      <div class="sv-msg">👋 هلا وسهلا! شو بدك تطلب اليوم؟</div>
-      <button class="sv-btn primary" onclick="svBot.go('games')">🎮 اختر لعبتك</button>
-      <button class="sv-btn" onclick="svBot.go('contact')">📞 تواصل معنا</button>
-    `,
-
-    // 2. اختيار اللعبة
-    games: () => `
-      <div class="sv-progress">1 / 4</div>
-      <div class="sv-msg">🎮 اختار اللعبة:</div>
-      <button class="sv-btn" onclick="svBot.choose('game','pubg')">🔫 ببجي موبايل</button>
-      <button class="sv-btn" onclick="svBot.choose('game','freefire')">🔥 فري فاير</button>
-      <button class="sv-btn" onclick="svBot.choose('game','jawaker')">🃏 جواكر</button>
-      <button class="sv-btn" onclick="svBot.choose('game','coc')">🛡️ كلاش أوف كلانس</button>
-      <button class="sv-btn" onclick="svBot.choose('game','royale')">👑 كلاش رويال</button>
-      <button class="sv-btn" onclick="svBot.choose('game','fortnite')">🎯 فورتنايت</button>
-      <button class="sv-btn back" onclick="svBot.go('home')">← رجوع</button>
-    `,
-
-    // 3. اختيار الفئة
-    category: () => {
-      const game = botState.data.game;
-      const names = {
-        pubg: "ببجي", freefire: "فري فاير", jawaker: "جواكر",
-        coc: "كلاش أوف كلانس", royale: "كلاش رويال", fortnite: "فورتنايت"
-      };
-      return `
-        <div class="sv-progress">2 / 4</div>
-        <div class="sv-msg">اخترت: <b>${names[game]}</b><br>شو بدك؟</div>
-        <button class="sv-btn primary" onclick="svBot.choose('category','accounts')">🎮 حسابات</button>
-        <button class="sv-btn primary" onclick="svBot.choose('category','currency')">💎 شدات / جواهر</button>
-        <button class="sv-btn back" onclick="svBot.go('games')">← رجوع</button>
-      `;
-    },
-
-    // 4. اختيار الباقة (نموذج مبدئي)
-    packs: () => {
-      const { game, category } = botState.data;
-      const names = {
-        pubg: "ببجي", freefire: "فري فاير", jawaker: "جواكر",
-        coc: "كلاش أوف كلانس", royale: "كلاش رويال", fortnite: "فورتنايت"
-      };
-      const label = category === "currency" ? "شدات/جواهر" : "حسابات";
-      return `
-        <div class="sv-progress">3 / 4</div>
-        <div class="sv-msg">${names[game]} - ${label}<br>اختار الباقة:</div>
-        <button class="sv-btn" onclick="svBot.choosePack('باقة 1', 5)">باقة 1 - 5$</button>
-        <button class="sv-btn" onclick="svBot.choosePack('باقة 2', 25)">باقة 2 - 25$</button>
-        <button class="sv-btn" onclick="svBot.choosePack('باقة 3', 50)">باقة 3 - 50$</button>
-        <button class="sv-btn" onclick="svBot.choosePack('باقة 4', 120)">باقة 4 - 120$</button>
-        <button class="sv-btn back" onclick="svBot.go('category')">← رجوع</button>
-      `;
-    },
-
-    // 5. طريقة الدفع
-    payment: () => `
-      <div class="sv-progress">4 / 4</div>
-      <div class="sv-msg">✅ اخترت: <b>${botState.data.pack}</b><br>السعر: <b>${botState.data.price}$</b><br><br>اختار طريقة الدفع:</div>
-      <button class="sv-btn primary" onclick="svBot.choose('payment','شام كاش')">💵 شام كاش</button>
-      <button class="sv-btn primary" onclick="svBot.choose('payment','سيرياتيل كاش')">📱 سيرياتيل كاش</button>
-      <button class="sv-btn back" onclick="svBot.go('packs')">← رجوع</button>
-    `,
-
-    // 6. تأكيد الطلب
-    confirm: () => `
-      <div class="sv-msg">
-        ✅ <b>ملخص الطلب:</b><br><br>
-        🎮 اللعبة: ${botState.data.game}<br>
-        📦 الباقة: ${botState.data.pack}<br>
-        💰 السعر: ${botState.data.price}$<br>
-        💳 الدفع: ${botState.data.payment}<br><br>
-        للاتمام، اضغط الزر تحت.
-      </div>
-      <button class="sv-btn primary" onclick="svBot.sendWhatsApp()">
-        📲 اتمام الطلب عبر واتساب
-      </button>
-      <button class="sv-btn back" onclick="svBot.go('payment')">← رجوع</button>
-    `,
-
-    // 7. تواصل
-    contact: () => `
-      <div class="sv-msg">📞 كيف بدك تتواصل معنا؟</div>
-      <button class="sv-btn primary" onclick="svBot.sendWhatsApp()">📲 واتساب</button>
-      <button class="sv-btn back" onclick="svBot.go('home')">← رجوع</button>
-    `
-  };
-
   // ===== دوال البوت =====
   window.svBot = {
     open: () => {
       botState.open = true;
       document.getElementById('sv-bot-window').classList.add('open');
-      svBot.go('home');
     },
 
     close: () => {
@@ -286,35 +247,86 @@
       document.getElementById('sv-bot-window').classList.remove('open');
     },
 
-    go: (screen) => {
-      botState.step = screen;
-      const content = document.getElementById('sv-bot-content');
-      content.innerHTML = SCREENS[screen]();
-      content.scrollTop = 0;
+    openFromGame: (game, category) => {
+      botState.data = { game, category, pack: null, price: null };
+      svBot.open();
+      svBot.showPacks();
     },
 
-    choose: (key, value) => {
-      botState.data[key] = value;
-      // الانتقال للشاشة التالية
-      if (key === 'game') svBot.go('category');
-      if (key === 'category') svBot.go('packs');
-      if (key === 'payment') svBot.go('confirm');
+    showPacks: () => {
+      const { game, category } = botState.data;
+      const packs = PACKS[game][category];
+      const categoryLabel = category === 'currency' ? CURRENCY_LABELS[game] : 'حسابات';
+
+      let html = `
+        <div class="sv-msg">
+          ${GAME_NAMES[game]}<br>
+          <b>${categoryLabel}</b><br><br>
+          اختار الباقة:
+        </div>
+      `;
+
+      packs.forEach((p, i) => {
+        html += `<button class="sv-btn primary" onclick="svBot.choosePack(${i})">${p.name} — ${p.price}$</button>`;
+      });
+
+      html += `<button class="sv-btn back" onclick="svBot.close()">✕ إغلاق</button>`;
+
+      document.getElementById('sv-bot-content').innerHTML = html;
     },
 
-    choosePack: (pack, price) => {
-      botState.data.pack = pack;
-      botState.data.price = price;
-      svBot.go('payment');
+    choosePack: (index) => {
+      const { game, category } = botState.data;
+      const pack = PACKS[game][category][index];
+      botState.data.pack = pack.name;
+      botState.data.price = pack.price;
+      svBot.showPayment();
+    },
+
+    showPayment: () => {
+      const d = botState.data;
+      const html = `
+        <div class="sv-msg">
+          ✅ اخترت: <b>${d.pack}</b><br>
+          💰 السعر: <b>${d.price}$</b><br><br>
+          اختار طريقة الدفع:
+        </div>
+        <button class="sv-btn primary" onclick="svBot.choosePayment('شام كاش')">💵 شام كاش</button>
+        <button class="sv-btn primary" onclick="svBot.choosePayment('سيرياتيل كاش')">📱 سيرياتيل كاش</button>
+        <button class="sv-btn back" onclick="svBot.showPacks()">← رجوع</button>
+      `;
+      document.getElementById('sv-bot-content').innerHTML = html;
+    },
+
+    choosePayment: (method) => {
+      botState.data.payment = method;
+      svBot.showConfirm();
+    },
+
+    showConfirm: () => {
+      const d = botState.data;
+      const html = `
+        <div class="sv-msg">
+          📋 <b>ملخص الطلب:</b><br><br>
+          🎮 اللعبة: ${GAME_NAMES[d.game]}<br>
+          📦 الباقة: ${d.pack}<br>
+          💰 السعر: ${d.price}$<br>
+          💳 الدفع: ${d.payment}<br><br>
+          للاتمام، اضغط الزر تحت:
+        </div>
+        <button class="sv-btn primary" onclick="svBot.sendWhatsApp()">📲 إتمام الطلب</button>
+        <button class="sv-btn back" onclick="svBot.showPayment()">← رجوع</button>
+      `;
+      document.getElementById('sv-bot-content').innerHTML = html;
     },
 
     sendWhatsApp: () => {
       const d = botState.data;
       let msg = `السلام عليكم، بدي أطلب من Savior Store:%0A%0A`;
-      if (d.game) msg += `🎮 اللعبة: ${d.game}%0A`;
-      if (d.category) msg += `📂 الفئة: ${d.category}%0A`;
-      if (d.pack) msg += `📦 الباقة: ${d.pack}%0A`;
-      if (d.price) msg += `💰 السعر: ${d.price}$%0A`;
-      if (d.payment) msg += `💳 الدفع: ${d.payment}%0A`;
+      msg += `🎮 اللعبة: ${GAME_NAMES[d.game]}%0A`;
+      msg += `📦 الباقة: ${d.pack}%0A`;
+      msg += `💰 السعر: ${d.price}$%0A`;
+      msg += `💳 الدفع: ${d.payment}%0A`;
       window.open(`https://wa.me/${CONFIG.whatsapp}?text=${msg}`, '_blank');
     }
   };
@@ -323,7 +335,7 @@
   function init() {
     buildCSS();
     buildUI();
-    console.log('🛡️ Savior Bot loaded');
+    console.log('🛡️ Savior Bot v2 loaded');
   }
 
   if (document.readyState === 'loading') {
